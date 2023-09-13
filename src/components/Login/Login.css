@@ -1,0 +1,35 @@
+.login {
+  width: 396px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  background-color: #202020;
+  height: 100vh;
+ }
+
+ @media screen and (max-width: 900px) {
+  .login {
+    padding: 0 186px;
+  }
+ }
+ @media screen and (max-width: 768px) {
+  .login {
+    padding: 0 70px;
+  }
+ }
+ @media screen and (max-width: 550px) {
+  .login {
+    padding: 0 30px;
+    min-width: 260px;
+    padding-bottom: 235px;
+    align-items: center;
+  }
+ }
+
+ @media screen and (max-width: 400px) {
+  .login {    
+    padding: 0 30px;
+    padding-bottom: 232px;
+  }
+ }
+ 

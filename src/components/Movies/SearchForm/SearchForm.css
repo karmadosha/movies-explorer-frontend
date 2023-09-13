@@ -1,0 +1,133 @@
+
+.searchform {  
+  border-bottom: 1px solid #424242;
+  margin: 0 70px;
+  padding: 0;
+}
+
+.searchform__container {  
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 70px 0 40px;
+  background-color: #2f2f2f;
+  border-radius: 40px;  
+}
+
+.searchform__input {  
+  border: none;
+  border-radius: 40px;
+  background-color: #2f2f2f;
+  width: 100%;
+  height: 46px;
+  color: #FFFFFF;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 20px;
+  width: 100%;
+  padding-left: 21px;
+  outline: none;
+}
+
+.searchform__input::placeholder {
+  color: #8b8b8b;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 17px;  
+}
+
+.searchform__find-btn {
+  background-image: url(../../../images/find.svg);
+  cursor: pointer;  
+  width: 80px;
+  height: 34px;
+  background-color: transparent;
+  border: none;
+  object-fit: cover;
+  margin: 0;
+  padding: 0;
+  padding-right: 87px;
+}
+
+.searchform__find-btn:hover {
+  opacity: 0.7;
+}
+
+.searchform__filter-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  margin-bottom: 70px;
+}
+
+.searchform__filter {
+  position: relative;  
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.searchform__checkbox {
+ opacity: 0;
+ position: absolute;
+ width:36px;
+ height: 23px;
+ z-index: 1;
+ cursor: pointer;
+}
+
+.searchform__checkbox-label {
+  position: relative;
+  width:36px;
+  height: 22px;
+  margin: 0;  
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(0 0 0 0);
+  cursor: pointer;
+}
+
+.searchform__checkbox + .searchform__checkbox-label {
+  background-image: url(../../../images/slider-off.svg);
+  background-repeat: no-repeat;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.searchform__checkbox:checked + .searchform__checkbox-label {
+  background-image: url(../../../images/slider-on.svg);  
+}
+
+.searchform__check-title {
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  margin:0;
+  padding: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .searchform {    
+    margin: 0 30px;
+  }
+}
+
+@media screen and (max-width: 420px) {
+  .searchform {    
+    margin: 0 14px;
+  }
+  .searchform__container {  
+    margin: 80px 0 40px;
+  }
+  .searchform__filter-group {
+    gap: 13px;
+    margin-bottom: 50px;
+  }
+  .searchform__check-title {
+    font-size: 11px;    
+  }
+}

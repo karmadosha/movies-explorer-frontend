@@ -1,0 +1,42 @@
+.header {  
+  min-height: 74px;
+  max-width: 1280px;    
+  display: flex;
+  flex-direction: row; 
+  align-items: center;  
+  margin: 0;
+  padding: 0 70px;  
+}
+
+.header__landing {
+  background-color: #073042;  
+}
+
+.header__movies {
+  background-color: #202020;  
+}
+
+.header__logo {
+  cursor: pointer;
+  align-self: center;
+  margin: 0;
+  padding: 0;
+}
+.header__logo:hover {
+  opacity: 0.8;
+}
+
+@media screen and (max-width: 768px) {
+  .header {
+    max-width: calc(100% - 60px);    
+    padding: 0 30px;
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .header {
+    max-width: calc(100% - 28px);    
+    padding: 0 14px;
+  }
+}

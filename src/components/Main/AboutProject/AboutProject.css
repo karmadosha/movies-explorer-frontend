@@ -1,0 +1,148 @@
+.about { 
+  margin: 110px 70px;   
+  color: #FFFFFF;
+  }
+
+.about__header {  
+  font-size: 22px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.88px;  
+  border-bottom: 1px solid #DADADA;
+  margin: 0 0 70px;
+  padding: 0 0 23px;
+}
+
+.about__content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 40px;
+  margin: 0 0 110px 0;
+}
+
+.about__title {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.8px;
+  margin: 0 0 26px 0;
+}
+
+.about__subtitle {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  margin: 0;
+}
+
+.about__timeline {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  grid-template-rows: 36px;
+  column-gap: 0;    
+  align-items: center;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.about__timeline-week {
+  background-color: #3DDC84;
+  color: #000000;
+  padding-top: 9px;
+  padding-bottom: 9px;
+}
+
+.about__timeline-fourweek {
+  background-color: #303030;
+  color: #FFFFFF;
+  padding-top: 9px;
+  padding-bottom: 9px;
+}
+
+.about__timeline-cell {
+  color: #8B8B8B;  
+  font-weight: 500;
+  line-height: 17px;  
+}
+
+@media screen and (max-width: 768px) {
+  .about {
+    margin: 90px 50px 80px;
+  }
+  .about__header {  
+    margin: 0 0 65px;
+  }
+  .about__content {    
+    gap: 35px;
+    margin: 0 0 93px 0;
+  }
+  .about__subtitle {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+    margin: 0;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .about {
+    margin: 70px 18px;
+  }
+  .about__header {  
+    margin: 0 0 65px;
+    font-size: 18px;
+    letter-spacing: -0.72px;
+  }
+  .about__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 56px;
+    margin: 0 0 60px 0;
+  }
+  .about__title {
+    font-size: 18px;
+    letter-spacing: -0.72px;
+    margin: 0 0 16px 0;
+  }  
+  .about__subtitle {
+    font-size: 11px;    
+    line-height: 16px; 
+  }
+  .about__timeline {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 100px 184px;
+    grid-template-rows: 35px;
+    column-gap: 0;      
+    align-items: center;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 400;
+    line-height: normal;
+  }
+  
+  .about__timeline-week {
+    background-color: #3DDC84;
+    color: #000000;
+    padding-top: 11px;
+    padding-bottom: 11px;
+  }
+  
+  .about__timeline-fourweek {
+    background-color: #303030;
+    color: #FFFFFF;
+    padding-top: 11px;
+    padding-bottom: 11px;
+  }
+  
+  .about__timeline-cell {
+    color: #A0A0A0;  
+    font-weight: 400;
+    line-height: normal;  
+  }
+}
