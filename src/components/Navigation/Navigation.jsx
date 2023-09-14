@@ -47,7 +47,7 @@ function Navigation({ isLoggedIn }) {
     <div>
       <button
        type="button" 
-       aria-label="кнопка меню" className="burger-menu__btn" 
+       aria-label="кнопка меню" className="navigation__burger-btn" 
        onClick={toggleBurgerMenu}/>
     </div>
     ) : (

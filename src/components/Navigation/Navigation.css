@@ -89,7 +89,7 @@
   opacity: 0.7;
 }
 
-.burger-menu__btn {
+.navigation__burger-btn {
   background-image: url(../../images/burger-menu.svg);
   background-repeat: no-repeat;
   background-color: transparent;
@@ -99,7 +99,7 @@
   display: none;
   cursor: pointer;  
 }
-.burger-menu__btn:hover {
+.navigation__burger-btn:hover {
   opacity: 0.7;
 }
 
@@ -113,7 +113,7 @@
   .navigation__promo-link {
     font-size: 12px; 
   }
-  .burger-menu__btn {
+  .navigation__burger-btn {
     background-image: url(../../images/burger-menu.svg);
     background-repeat: no-repeat;
     display: block;
@@ -131,7 +131,7 @@
   .navigation__promo-link_green {
     padding: 5px 12px;    
   }
-  .burger-menu__btn {
+  .navigation__burger-btn {
     width: 40px;
     height: 43px;   
   }

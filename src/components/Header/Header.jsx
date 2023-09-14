@@ -6,12 +6,12 @@ import Navigation from '../Navigation/Navigation';
 
 function Header({ isLoggedIn }) {
   const location = useLocation();
-  const headerClassName = (`header ${location.pathname === "/" ? "header__landing" : "header__movies"}`);
+  const headerClassName = (location.pathname === "/" ? "header__landing" : "header__movies");
 
 
   return (
-    <header className={headerClassName}>      
-        <div>
+    <header className="header">      
+        <div className={headerClassName}>
           <Link to="/" className="header__logo">
             <img alt="Логотип проекта Movies-explorer" src={headerLogo} />
           </Link>
