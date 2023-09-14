@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import './BurgerMenu.css';
 import profileIcon from '../../images/profile-icon.svg';
 

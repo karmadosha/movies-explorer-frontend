@@ -19,7 +19,6 @@
   flex-direction: column;
   align-items: center;  
 }
-
 .techs__heading {
   font-size: 50px;
   font-weight: 400;
@@ -121,7 +120,7 @@
   .techs__icons {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: center;
     flex-wrap: wrap;
     gap: 10px;
     margin: 0 70px;
