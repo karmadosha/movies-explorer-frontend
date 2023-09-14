@@ -57,7 +57,8 @@
   }
   .notfound__subtitle {
     font-size: 12px;
-    padding: 10px 0 284px;
+    padding: 10px 0 278px;
+    margin-bottom: 0;
   }
   .notfound__back-link {
     font-size: 12px;

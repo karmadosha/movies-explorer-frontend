@@ -11,6 +11,11 @@
 .welcome__logo {  
   padding-top: 70px;
   padding-bottom: 40px;
+  cursor: pointer;
+}
+
+.welcome__logo:hover {
+  opacity: 0.7;
 }
 
 .welcome__text {

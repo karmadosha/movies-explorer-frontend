@@ -31,7 +31,7 @@ function Form({ inputUserName, submitBtn, linkText, question, link }) {
               name="email"
               placeholder="Введите email"
               onChange={form.handleChange}
-              value={form.value}            
+              value={form.value}
               required
             />
             <span className={(`auth-form__input-error ${form.errors.email ? 'auth-form__input-error_active' : ''}`)}>{form.errors.email}</span>
@@ -42,6 +42,7 @@ function Form({ inputUserName, submitBtn, linkText, question, link }) {
               type="password"
               name="password"
               minLength='6'
+              maxLength='30'
               placeholder="Введите пароль"
               onChange={form.handleChange}
               value={form.value}
@@ -55,7 +56,7 @@ function Form({ inputUserName, submitBtn, linkText, question, link }) {
         <p className='auth-form__question'>{question}
          <Link className='auth-form__link' to={link}>{linkText}</Link>
         </p>
-      </div>    
+      </div>
     </form>
   )
 };

@@ -1,35 +1,22 @@
 .login {
-  width: 396px;
+  width: 31%;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   margin: 0 auto;
   background-color: #202020;
   height: 100vh;
  }
-
- @media screen and (max-width: 900px) {
-  .login {
-    padding: 0 186px;
-  }
- }
  @media screen and (max-width: 768px) {
   .login {
-    padding: 0 70px;
+    width: 52%;
   }
  }
- @media screen and (max-width: 550px) {
-  .login {
-    padding: 0 30px;
-    min-width: 260px;
-    padding-bottom: 235px;
-    align-items: center;
-  }
- }
-
- @media screen and (max-width: 400px) {
+ 
+ @media screen and (max-width: 450px) {
   .login {    
-    padding: 0 30px;
-    padding-bottom: 232px;
+    width: 82%;
+    align-items: center;
   }
  }
  

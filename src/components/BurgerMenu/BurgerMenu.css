@@ -50,7 +50,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 159px auto 90px;
+  margin: 55px auto 90px;
   gap: 28px;
 }
 
@@ -77,9 +77,36 @@
 
 .burger__profile-link {
   cursor: pointer;
-  background-image: url(../../images/profile.svg);
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 12px;
+  margin:600px 0 80px;
 }
 
 .burger__profile-link:hover {
   opacity: 0.7;
+}
+
+.burger__profile-icon {
+  margin: 0;
+  padding: 0;
+  padding-left: 7px;
+}
+@media screen and (max-width: 380px) {
+  .burger__container {
+    width: 100%;    
+  }
+  .burger__close-btn {        
+    top: 14px;
+    right: 20px;
+  }
+  .burger__links {    
+    margin: 45px auto 90px;
+    gap: 24px;
+  }
+  .burger__profile-link {    
+    margin: 430px 0 55px;
+  }
 }

@@ -9,6 +9,7 @@
   width: 100%;
   padding-left: 45px;
   justify-content: space-between;
+  align-items: center;
 }
 
 .navigation__movies-links {
@@ -16,7 +17,9 @@
   flex-direction: row;
   justify-content: flex-start;
   gap: 20px;
-  align-items: center;  
+  align-items: center;
+  list-style: none;
+  padding: 0;
 }
 
 .navigation__movies-link {
@@ -37,19 +40,24 @@
 
 .navigation__profile-link {
   cursor: pointer;
-  padding-top: 10px;
   margin: 0;
-  align-self: flex-end; 
+  padding: 0;
+  align-self: flex-end;
+  cursor: pointer;
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 12px;
 }
 
 .navigation__profile-link:hover {
   opacity: 0.7;
 }
 
-.navigation__profile-icon {  
-  align-self: center;
-  margin: 0;
-  padding: 0;  
+.navigation__profile-icon {
+  margin: 0;  
+  padding-left: 7px;
 }
 
 .navigation__menu-promo {  

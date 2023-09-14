@@ -1,10 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import './Profile.css';
-import Header from "../Header/Header";
 
-function Profile() {
-  const isLoggedIn = true;
+function Profile() {  
   const [isEditable, setIsEditable] = React.useState(false);
   function handleEditClick() {
     setIsEditable(true);
@@ -14,9 +12,8 @@ function Profile() {
   };
 
   return (
-    <>
-      <Header isLoggedIn={isLoggedIn} />
-      <main className="profile">        
+    <main>      
+      <section className="profile">        
         <h1 className="profile__greeting">Привет, Виталий!</h1>
         <form className="profile__form">
           <div className="profile__container">
@@ -26,8 +23,9 @@ function Profile() {
                 type="text" 
                 name="name" 
                 placeholder="Введите ваше имя"
-                minLength="2"                      
-                className="profile__container-input"                
+                minLength="2"
+                maxLength="30"                     
+                className="profile__container-input"
                 required /> : <span className="profile__container-value">Виталий</span>
             }
           </div>
@@ -38,7 +36,7 @@ function Profile() {
                 type="email" 
                 name="email" 
                 placeholder="Введите ваш email"                   
-                className="profile__container-input"                
+                className="profile__container-input" 
                 required/> : <span className="profile__container-value">pochta@pochta.ru</span>
             }
           </div>        
@@ -66,8 +64,8 @@ function Profile() {
             )}
           </div>
           </form>
-      </main>
-    </>   
+      </section>
+    </main>   
   )
 };
 

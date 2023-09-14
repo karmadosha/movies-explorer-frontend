@@ -6,18 +6,20 @@ import Form from "../Form/Form";
 function Register() {
   
   return(
-    <section className="register">
-      <div className="register__container">
-        <WelcomeTop />
-        <Form 
-          inputUserName={true}
-          submitBtn={'Зарегистрироваться'}
-          question={'Уже зарегистрированы?'}
-          link={'/signin'}
-          linkText={'Войти'}
-        />
-      </div>      
-    </section>
+    <main>
+      <section className="register">
+        <div className="register__container">
+          <WelcomeTop />
+          <Form 
+            inputUserName={true}
+            submitBtn={'Зарегистрироваться'}
+            question={'Уже зарегистрированы?'}
+            link={'/signin'}
+            linkText={'Войти'}
+          />
+        </div>
+      </section>
+    </main>    
   )
 };
 

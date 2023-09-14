@@ -9,10 +9,8 @@ import Techs from "./Techs/Techs";
 import AboutMe from "./AboutMe/AboutMe";
 
 function Main() {
-  const isLoggedIn = false;
-  return (
-    <>
-      <Header isLoggedIn={isLoggedIn} />
+  
+  return (         
       <main className="main">
         <Promo />
         <NavTab />
@@ -29,9 +27,6 @@ function Main() {
           id="about-me"
         />
       </main>
-      <Footer />
-    </>
-    
  )
 }
 

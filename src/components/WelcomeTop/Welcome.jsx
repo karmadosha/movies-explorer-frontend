@@ -12,7 +12,7 @@ function WelcomeTop() {
       <Link to="/" className="welcome__logo">
         <img src={logo} alt="Логотип проекта Movies Explorer" />
       </Link>
-      <h1 className="welcome__text">{welcomeText}</h1>
+      <h2 className="welcome__text">{welcomeText}</h2>
     </section>
   )
 };

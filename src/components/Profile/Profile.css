@@ -26,10 +26,9 @@
   align-items: center;
   width: 100%;
 }
-.profile__container:not(:last-of-type) {
+.profile__container:first-of-type {
   border-bottom: 1px solid #424242;
 }
-
 .profile__container-title {
   font-size: 11px;
   font-weight: 500;
@@ -42,6 +41,7 @@
   text-align: end;
   color: #ffffff;
   outline: none;
+  padding: 16px 0;
 }
 .profile__container-input::placeholder {
   font-size: 11px;
@@ -49,6 +49,22 @@
   line-height: normal;
   color: #ffffff;
   align-self: flex-end;
+  padding: 0;
+  
+  margin: 0;
+}
+
+.profile__container-input:focus {
+  border-bottom: 1px solid #F8F8F8;
+}
+.profile__container-value {
+  font-size: 11px;
+  font-weight: 400;
+  line-height: normal;
+  color: #ffffff;
+  align-self: flex-end;
+  padding: 13px 0;
+
 }
 .profile__buttons {
   display: flex;
@@ -79,6 +95,10 @@
   text-decoration: none;
   cursor: pointer;
   padding-bottom: 70px;
+}
+
+.profile__logout-link:hover {
+  opacity: 0.7;
 }
 
 .profile__save-btn {
@@ -114,8 +134,11 @@
   .profile {
     padding-top: 236px;
   }
+  .profile__greeting {    
+    margin-bottom: 90px;
+  }
   .profile__edit-btn {
-    margin-top: 210px;
+    margin-top: 200px;
   }
   .profile__form {
     width: 53%;
