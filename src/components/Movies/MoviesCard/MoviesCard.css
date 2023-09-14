@@ -1,0 +1,137 @@
+.movie {
+  width: 364px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  position: relative;
+  margin: 0;
+  padding: 0;  
+}
+.movie__pic {
+  width: 100%;
+  height: 203px;
+  object-fit: cover;
+  cursor: pointer;
+}
+.movie__info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 16px;
+  cursor: pointer;
+}
+
+.movie__info-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;  
+}
+
+.movie__save-icon {
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  border: none;
+  background-image: url(../../../images/save-icon.svg);
+  object-fit: cover;
+  margin: 0;
+  margin-top: 9px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.movie__save-icon:hover {
+  opacity: 0.7;
+}
+
+.movie__save-icon_active {
+  background-image: url(../../../images/saved-red-icon.svg);
+}
+
+.movie__title {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+  margin-top: 16px;
+  margin-bottom: 17px;
+  padding: 0;
+}
+
+.movie__duration {
+  color: #8b8b8b;
+  font-size: 11px;
+  font-weight: 400;
+  margin: 0;
+  margin-bottom: 16px;
+  padding: 0;
+}
+
+.movie__delete-btn {
+  background-image: url(../../../images/delete-btn.svg);
+  width: 30px;
+  height: 30px;
+  margin-top: 9px;
+  object-fit: cover;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  visibility: hidden;
+}
+.movie__info:hover .movie__delete-btn {
+  visibility: visible;
+}
+
+.movie__delete-btn:hover {
+  opacity: 0.7;
+}
+
+@media screen and (max-width:768px) {
+  .movie {
+    width: 339px;      
+  }
+  .movie__pic {    
+    height: 190px;    
+  }
+  .movie__info {
+    padding: 0 14px;
+  }  
+  .movie__save-icon {
+    margin-top: 8px;    
+  }  
+  .movie__title {    
+    font-size: 13px;
+    margin-top: 14px;
+    margin-bottom: 15px;
+  }  
+  .movie__duration {
+    margin-bottom: 14px;
+  }  
+  .movie__delete-btn {    
+    margin-top: 8px;
+  }
+}
+
+@media screen and (max-width:450px) {
+  .movie {
+    width: 300px;      
+  }
+  .movie__pic {    
+    height: 168px;    
+  }
+  .movie__info {
+    padding: 0 14px;
+  }  
+  .movie__save-icon {
+    margin-top: 7px;    
+  }  
+  .movie__title {    
+    font-size: 12px;    
+    margin-bottom: 14px;
+  }    
+  .movie__delete-btn {    
+    margin-top: 7px;
+    visibility: visible;
+  }
+}
