@@ -4,6 +4,7 @@ import "./Navigation.css";
 import profileIcon from '../../images/profile-icon.svg';
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
 
+
 function Navigation({ isLoggedIn }) {
   const [isBurgerMenuOpen, setBurgerMenuOpen] = useState(false);
   const location = useLocation();

@@ -3,7 +3,7 @@ import './Login.css';
 import WelcomeTop from "../WelcomeTop/Welcome";
 import Form from "../Form/Form";
 
-function Login() {
+function Login({ onLogin }) {
   return(
     <main>
       <section className="login">
@@ -14,6 +14,7 @@ function Login() {
           question={'Еще не зарегистрированы?'}
           link={'/signup'}
           linkText={'Регистрация'}
+          onSubmit={onLogin}
         />
       </section>
     </main>

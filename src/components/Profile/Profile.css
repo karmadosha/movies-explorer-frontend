@@ -49,11 +49,9 @@
   line-height: normal;
   color: #ffffff;
   align-self: flex-end;
-  padding: 0;
-  
+  padding: 0;  
   margin: 0;
 }
-
 .profile__container-input:focus {
   border-bottom: 1px solid #F8F8F8;
 }
@@ -64,12 +62,25 @@
   color: #ffffff;
   align-self: flex-end;
   padding: 13px 0;
-
 }
+.profile__container-error {
+  color: #FF004C;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: normal;
+  padding:0;
+  margin: 189px auto 20px;
+  visibility: hidden;
+}
+.profile__container-error_active {
+  visibility: visible;
+}
+
 .profile__buttons {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  padding:0;  
   align-items: center;
   gap: 16px;
 }
@@ -105,6 +116,7 @@
   background-color: #4285F4;
   width: 100%;
   height: 45px;
+  margin-top: 220px;
   border: none;
   border-radius: 3px;
   color: #FFFFFF;
@@ -119,15 +131,20 @@
 .profile__save-btn_disabled {
   background-color: #F8F8F8;
   color: #C2C2C2;
+  cursor: default;
 }
-
-.profile__error {
-  color: #FF004C;
-  font-size: 11px;
-  font-weight: 400;
-  line-height: normal;
-  padding:0;
-  margin: 189px auto 20px;
+.profile__save-btn_disabled:hover {
+  opacity: 1;
+}
+.profile__notedit-btn {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+.profile__notedit-btn:hover {
+  opacity: 0.8;
 }
 
 @media screen and (max-width: 768px) {

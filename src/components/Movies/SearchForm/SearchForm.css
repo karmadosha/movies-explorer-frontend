@@ -1,8 +1,8 @@
-
 .searchform {  
   border-bottom: 1px solid #424242; 
   margin: 0 70px;
-  padding: 0;  
+  padding: 0;
+  
 }
 
 .searchform__container {  
@@ -18,7 +18,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin: 57px 0 40px;
+  margin: 57px 0 25px;
   background-color: #2f2f2f;
   border-radius: 40px;
 }
@@ -63,6 +63,21 @@
 
 .searchform__find-btn:hover {
   opacity: 0.7;
+}
+
+.searchform__error {  
+  visibility: hidden;
+}
+
+.searchform__error_active {
+  visibility: visible;
+  color: #FF3055;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  padding: 0;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .searchform__filter-group {

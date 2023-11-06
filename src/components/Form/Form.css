@@ -84,7 +84,12 @@ input:-webkit-autofill:focus {
 .auth-form__btn_disabled {
   background-color: #F8F8F8;
   color: #000000;
+  cursor: default;
 }
+.auth-form__btn_disabled:hover {
+  opacity: 1;
+}
+
 .auth-form__question {
   color: #8b8b8b;
   text-align: center;

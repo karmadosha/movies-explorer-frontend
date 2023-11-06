@@ -8,7 +8,6 @@ function Header({ isLoggedIn }) {
   const location = useLocation();
   const headerClassName = (location.pathname === "/" ? "header__landing" : "header__movies");
 
-
   return (
     <header className="header">      
         <div className={headerClassName}>

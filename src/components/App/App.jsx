@@ -1,5 +1,5 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Routes, Route, useLocation, useNavigate, Navigate } from 'react-router-dom';
 import Main from '../Main/Main';
 import Profile from '../Profile/Profile';
 import './App.css';
@@ -8,50 +8,239 @@ import Login from '../Login/Login';
 import NotFound from '../NotFound/NotFound';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../Movies/SavedMovies/SavedMovies';
-import Header from '../Header/Header';
-import Footer from '../Footer/Footer';
+import InfoTooltip from '../InfoTooltip/InfoTooltip';
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import * as api from '../../utils/MainApi';
+import { errorMessages, infoMessages } from '../../utils/constants';
 
-function App() { 
+function App() {
+  const [currentUser, setCurrentUser] = useState({});
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [favouriteMovies, setFavouriteMovies] = useState([]);  
+  const [isInfoTooltipOpen, setInfoTooltipOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [infoMessage, setInfoMessage] = useState('');
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  function closePopup() {
+    setInfoTooltipOpen(false);
+  };
+
+  function handleInfoMessage(text) {
+    setErrorMessage('');
+    setInfoMessage(text);
+    setInfoTooltipOpen(true);
+  };
+
+  function handleErrorMessage(text) {
+    setInfoMessage('');
+    setErrorMessage(text);
+    setInfoTooltipOpen(true);
+  };
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      const token = localStorage.getItem('token');      
+      api.checkToken(token)
+        .then((res) => {
+          if (res) {
+            setIsLoggedIn(true);
+            setCurrentUser(res);              
+            if (location.pathname !== '/signin') {
+              navigate(location.pathname, { replace: true });
+            }
+          }
+        })
+        .catch(err => console.log(err));
+    }
+  }, []);
+
+  useEffect(() => {    
+    if (isLoggedIn) {
+      api.getUserInfo()
+        .then((user) => {
+          setCurrentUser(user);
+          setIsLoggedIn(true);
+        })
+        .catch((err) => {
+          console.log(`загрузка информации о пользователе: ${err}`)
+        });
+            
+      api.getMovies()
+        .then((userMovies) => {
+          setFavouriteMovies(userMovies);
+          localStorage.setItem('userMovies', JSON.stringify(userMovies));
+        })
+        .catch((err) => {
+          console.log(`Ошибка загрузки фильмов: ${err}`)
+        })
+    }
+  }, [isLoggedIn]);      
+
+  function handleRegister(values) {
+    const { name, email, password } = values;
+    setIsLoading(true);  
+    api.register({ name, email, password })
+      .then(() => handleLogin({ email, password}))
+      .catch((err) => {
+        console.log(err);
+        (err === 'Ошибка: 409') ? handleErrorMessage(errorMessages.sameEmail) : handleErrorMessage(errorMessages.registryError);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })   
+  };
+
+  function handleLogin(values) {
+    const { email, password } = values;
+    setIsLoading(true);  
+    api.signin({ email, password })
+      .then((res) => {
+        if (res) {          
+          setIsLoggedIn(true);
+          localStorage.setItem('token', res.token);
+          console.log(res);
+          setCurrentUser(res);                   
+          handleInfoMessage(location.pathname === '/signup' ? infoMessages.register : infoMessages.login );
+          navigate('/movies', { replace: true });
+        }        
+      })
+      .catch((err) => {
+        setIsLoggedIn(false);
+        (err === 'Ошика: 401') ? handleErrorMessage(errorMessages.wrongNamePassword) : handleErrorMessage(errorMessages.authError);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
+  };
+
+  function handleLogout() {
+    setIsLoggedIn(false);
+    setCurrentUser({});    
+    localStorage.clear();
+    setFavouriteMovies([]);
+    handleInfoMessage(infoMessages.signout); 
+    navigate('/', { replace: true });
+  };
+
+  function handleUserInfoUpdate({name, email}) {
+    setIsLoading(true);  
+    api.updateUserInfo({name, email})
+      .then((res) => {
+        setCurrentUser(res);
+        handleInfoMessage(infoMessages.profileEdit);
+      })
+      .catch((err) => {
+        err === 'Ошибка: 409' ? handleErrorMessage(errorMessages.sameEmail) : handleErrorMessage(errorMessages.profileEditFailed)
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
+  };
+
+  function handleSaveMovie(movie) {
+    api.saveMovie(movie)
+      .then((res) => {
+        setFavouriteMovies([res, ...favouriteMovies]);
+        handleInfoMessage(infoMessages.saveMovie);
+      })
+      .catch((err) => {
+        console.log(err);        
+      })
+  };
+
+  function handleDeleteMovie(movie) {
+    const favouriteMovie = favouriteMovies.find((m) => 
+    m.movieId === movie.id || m.movieId === movie.movieId);
+
+    api.deleteMovie(favouriteMovie._id)
+      .then(() => {
+        const newFavouriteMovies = favouriteMovies.filter((m) => {
+          if (movie.id === m.movieId || movie.movieId === m.movieId) {
+            return false;
+          } else {
+            return true;
+          }
+        })
+        setFavouriteMovies(newFavouriteMovies);
+        handleInfoMessage(infoMessages.deleteMovie);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  }  
   
   return (
-    <div className='body'>
-      <div className="page">
-        <Routes>
-          <Route path='/signup' element={<Register />} />
-          <Route path='/signin' element={<Login />} />
-          <Route path='/' element={
-            <>
-              <Header  isLoggedIn={false}/>
-              <Main />
-              <Footer />
-            </>}
-          />
-          <Route path='/profile' element={
-            <>
-              <Header isLoggedIn={true} />
-              <Profile />
-            </>}
-          />
-          <Route path='/movies' element={
-            <>
-              <Header isLoggedIn={true} />
-              <Movies />
-              <Footer />
-            </>
-            }
-          />
-          <Route path='/saved-movies' element={
-            <>
-              <Header isLoggedIn={true} />
-              <SavedMovies />
-              <Footer />
-            </>
-            } 
-          />
-          <Route path='/*' element={<NotFound />} />
-        </Routes>
-      </div>
-    </div>    
+    <CurrentUserContext.Provider value={currentUser}>            
+      <div className='body'>
+        <div className="page">
+          <Routes>
+            <Route path='/signup'
+               element={isLoggedIn ? <Navigate to='/' /> : <Register onRegister={handleRegister}/>} />
+              <Route path='/signin'
+               element={isLoggedIn ? <Navigate to='/' /> : <Login onLogin={handleLogin}/>} />
+              <Route path='/' element={<Main isLoggedIn={isLoggedIn} />
+                }
+              />
+              <Route path='/profile' element={
+                <ProtectedRoute                  
+                  element={Profile}
+                  isLoggedIn={isLoggedIn}                  
+                  user={currentUser}
+                  onLogout={handleLogout}
+                  onProfileUpdate={handleUserInfoUpdate}
+                  isLoading={isLoading}
+                  setIsLoading={setIsLoading}
+                  handleInfoMessage={handleInfoMessage}
+                  handleErrorMessage={handleErrorMessage}
+                />
+                }
+              />
+              <Route
+               path='/movies' 
+               element={
+                 <ProtectedRoute
+                  element={Movies} 
+                  isLoggedIn={isLoggedIn}                  
+                  favouriteMovies={favouriteMovies}
+                  onLikeClick={handleSaveMovie}
+                  onDeleteClick={handleDeleteMovie}
+                  isLoading={isLoading}
+                  setIsLoading={setIsLoading}
+                  handleInfoMessage={handleInfoMessage}
+                  handleErrorMessage={handleErrorMessage}
+                /> }
+              />
+              <Route
+               path='/saved-movies' 
+               element={
+                 <ProtectedRoute
+                  element={SavedMovies} 
+                  isLoggedIn={isLoggedIn}                     
+                  favouriteMovies={favouriteMovies}
+                  setFavouriteMovies={setFavouriteMovies}
+                  isLoading={isLoading}
+                  setIsLoading={setIsLoading}
+                  onDeleteClick={handleDeleteMovie}
+                  handleInfoMessage={handleInfoMessage}
+                  handleErrorMessage={handleErrorMessage}
+                /> } 
+              />
+              <Route path='/*' element={<NotFound />} />
+            </Routes>
+            <InfoTooltip
+              isOpen={isInfoTooltipOpen}
+              onClose={closePopup}
+              errorMessage={errorMessage}
+              infoMessage={infoMessage}
+            />
+          </div>
+        </div>      
+    </CurrentUserContext.Provider>
   );
 }
 
