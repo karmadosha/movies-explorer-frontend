@@ -5,6 +5,7 @@
  https://www.figma.com/file/fLypmCCcj01jOJ4LwrzLv1/light-1-(Copy)?node-id=1%3A8436&mode=dev
 
 ## Ссылка на проект
+https://karmamovies.nomoredomainsicu.ru
 
 ## Бэкенд проекта
  https://github.com/karmadosha/movies-explorer-api 

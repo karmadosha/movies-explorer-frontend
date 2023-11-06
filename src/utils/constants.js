@@ -1,5 +1,5 @@
-/*export const MAIN_URL = 'https://api.karmamovies.nomoredomainsicu.ru';*/
-export const MAIN_URL = 'http://localhost:4000';
+export const MAIN_URL = 'https://api.karmamovies.nomoredomainsicu.ru';
+/*export const MAIN_URL = 'http://localhost:4000';*/
 export const MOVIES_URL = 'https://api.nomoreparties.co/beatfilm-movies';
 export const MOVIES_URL_IMG = 'https://api.nomoreparties.co';
 
