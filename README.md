@@ -7,6 +7,9 @@
 ## Ссылка на проект
 https://karmamovies.nomoredomainsicu.ru
 
+## Ссылка на пул-реквест
+https://github.com/karmadosha/movies-explorer-frontend/pull/2
+
 ## Бэкенд проекта
  https://github.com/karmadosha/movies-explorer-api 
 
