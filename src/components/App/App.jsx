@@ -18,7 +18,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [favouriteMovies, setFavouriteMovies] = useState([]);  
+  const [likedMovies, setLikedMovies] = useState([]);  
   const [isInfoTooltipOpen, setInfoTooltipOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [infoMessage, setInfoMessage] = useState('');
@@ -57,6 +57,7 @@ function App() {
         })
         .catch(err => console.log(err));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {    
@@ -72,7 +73,7 @@ function App() {
             
       api.getMovies()
         .then((userMovies) => {
-          setFavouriteMovies(userMovies);
+          setLikedMovies(userMovies);
           localStorage.setItem('userMovies', JSON.stringify(userMovies));
         })
         .catch((err) => {
@@ -122,7 +123,7 @@ function App() {
     setIsLoggedIn(false);
     setCurrentUser({});    
     localStorage.clear();
-    setFavouriteMovies([]);
+    setLikedMovies([]);
     handleInfoMessage(infoMessages.signout); 
     navigate('/', { replace: true });
   };
@@ -145,7 +146,7 @@ function App() {
   function handleSaveMovie(movie) {
     api.saveMovie(movie)
       .then((res) => {
-        setFavouriteMovies([res, ...favouriteMovies]);
+        setLikedMovies([res, ...likedMovies]);
         handleInfoMessage(infoMessages.saveMovie);
       })
       .catch((err) => {
@@ -154,19 +155,19 @@ function App() {
   };
 
   function handleDeleteMovie(movie) {
-    const favouriteMovie = favouriteMovies.find((m) => 
+    const favouriteMovie = likedMovies.find((m) => 
     m.movieId === movie.id || m.movieId === movie.movieId);
 
     api.deleteMovie(favouriteMovie._id)
       .then(() => {
-        const newFavouriteMovies = favouriteMovies.filter((m) => {
+        const newFavouriteMovies = likedMovies.filter((m) => {
           if (movie.id === m.movieId || movie.movieId === m.movieId) {
             return false;
           } else {
             return true;
           }
         })
-        setFavouriteMovies(newFavouriteMovies);
+        setLikedMovies(newFavouriteMovies);
         handleInfoMessage(infoMessages.deleteMovie);
       })
       .catch((err) => {
@@ -206,7 +207,7 @@ function App() {
                  <ProtectedRoute
                   element={Movies} 
                   isLoggedIn={isLoggedIn}                  
-                  favouriteMovies={favouriteMovies}
+                  likedMovies={likedMovies}
                   onLikeClick={handleSaveMovie}
                   onDeleteClick={handleDeleteMovie}
                   isLoading={isLoading}
@@ -221,8 +222,8 @@ function App() {
                  <ProtectedRoute
                   element={SavedMovies} 
                   isLoggedIn={isLoggedIn}                     
-                  favouriteMovies={favouriteMovies}
-                  setFavouriteMovies={setFavouriteMovies}
+                  likedMovies={likedMovies}
+                  setFavouriteMovies={setLikedMovies}
                   isLoading={isLoading}
                   setIsLoading={setIsLoading}
                   onDeleteClick={handleDeleteMovie}

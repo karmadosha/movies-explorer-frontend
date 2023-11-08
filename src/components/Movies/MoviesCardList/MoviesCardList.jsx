@@ -4,42 +4,42 @@ import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import { DESKTOP, TABLET, MOBILE, DESKTOP_MOVIES_COUNT, DESKTOP_MOVIES_ADD, TABLET_MOVIES_COUNT, MOBILE_MOVIES_COUNT, MOBILE_MOVIES_ADD } from "../../../utils/constants";
 import { useWidth } from "../../../hooks/useWidth";
-import { getFavouriteMovie } from "../../../utils/utils";
+import { getLikedMovie } from "../../../utils/utils";
 
-function MoviesCardList({ movies, favouriteMovies, onLikeClick, onDeleteClick }) {
+function MoviesCardList({ movies, likedMovies, onLikeClick, onDeleteClick }) {
   const location = useLocation();  
   
-  const [moviesToShow, setMoviesToShow] = useState([]);
-  const [moviesToShowAmount, setMoviesToShowAmount] = useState({ start: 0, add: 0 });
+  const [visibleMovies, setVisibleMovies] = useState([]);
+  const [visibleMoviesAmount, setVisibleMoviesAmount] = useState({ start: 0, add: 0 });
   const [isRender, setRender] = useState(true);
 
   const screenWidth = useWidth();
 
   useEffect(() => {
     if (movies.length) {
-      const result = movies.filter((item, index) => index < moviesToShowAmount.start);
-      setMoviesToShow(result);
+      const result = movies.filter((item, index) => index < visibleMoviesAmount.start);
+      setVisibleMovies(result);
     }
-  }, [movies, moviesToShowAmount.start]);
+  }, [movies, visibleMoviesAmount.start]);
 
   useEffect(() => {
     if (location.pathname === '/saved-movies') {
-      setMoviesToShow(favouriteMovies);
+      setVisibleMovies(likedMovies);
     }
-  }, [favouriteMovies, location]);
+  }, [likedMovies, location]);
 
   useEffect(() => {
     if (screenWidth >= DESKTOP ) {
-      setMoviesToShowAmount({ 
+      setVisibleMoviesAmount({ 
         start: DESKTOP_MOVIES_COUNT, 
         add: DESKTOP_MOVIES_ADD });
     } else if (screenWidth < DESKTOP && screenWidth >= TABLET) {
-      setMoviesToShowAmount({
+      setVisibleMoviesAmount({
         start: TABLET_MOVIES_COUNT,
         add: MOBILE_MOVIES_ADD
       })
     } else if (screenWidth < TABLET_MOVIES_COUNT && screenWidth >= MOBILE) {
-      setMoviesToShowAmount({
+      setVisibleMoviesAmount({
         start: MOBILE_MOVIES_COUNT,
         add: MOBILE_MOVIES_ADD
       })
@@ -48,24 +48,24 @@ function MoviesCardList({ movies, favouriteMovies, onLikeClick, onDeleteClick })
   }, [screenWidth, isRender]);
   
   function showMore() {
-    setMoviesToShow(movies.slice(0, moviesToShow.length + moviesToShowAmount.add))
+    setVisibleMovies(movies.slice(0, visibleMovies.length + visibleMoviesAmount.add))
   };
 
   return (
     <section className="movies-list">  
       <div className="movies-list__container">
-        {moviesToShow.map((movie) => {
+        {visibleMovies.map((movie) => {
           return (
             <MoviesCard
               movie={movie}
               key={location.pathname === '/saved-movies' ? movie.movieId : movie.id}
-              favourites={getFavouriteMovie(favouriteMovies, movie)}
+              favourites={getLikedMovie(likedMovies, movie)}
               onLikeClick={onLikeClick}
               onDeleteClick={onDeleteClick}
             />
           )
         })}
-        {moviesToShow.length < movies.length && location.pathname === '/movies' ? (
+        {visibleMovies.length < movies.length && location.pathname === '/movies' ? (
           <button className='movies-list__moreBtn' 
             type="button"
             aria-label="показать больше фильмов"

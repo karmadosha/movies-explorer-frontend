@@ -3,7 +3,7 @@ import './SearchForm.css';
 import { useLocation } from "react-router-dom";
 import useFormValidation from "../../../hooks/useFormValidation";
 
-function SearchForm({ onSearch, onCheckBox, isShortMovies, setIsShowMoviesFavourites, favouriteMovies }) {
+function SearchForm({ onSearch, onCheckBox, isShort, setShowLikedMovies, likedMovies }) {
   const location = useLocation();
   const { values, handleChange, setValues, setIsValid, errors} = useFormValidation();  
 
@@ -27,9 +27,9 @@ function SearchForm({ onSearch, onCheckBox, isShortMovies, setIsShowMoviesFavour
 
   useEffect(() => {
     if (location.pathname === '/saved-movies' && !values.query) {
-      setIsShowMoviesFavourites(favouriteMovies);
+      setShowLikedMovies(likedMovies);
     }
-  }, [favouriteMovies, location, values.query, setIsShowMoviesFavourites]);
+  }, [likedMovies, location, values.query, setShowLikedMovies]);
 
   return(
     <section className="searchform">
@@ -63,7 +63,7 @@ function SearchForm({ onSearch, onCheckBox, isShortMovies, setIsShowMoviesFavour
            id="checkbox" 
            className="searchform__checkbox"
            onChange={onCheckBox}
-           checked={isShortMovies ? true : false}
+           checked={isShort ? true : false}
           />
           <span className="searchform__checkbox-label" />
           </label>

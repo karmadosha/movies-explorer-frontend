@@ -8,29 +8,29 @@ import Preloader from "../Preloader/Preloader";
 import { filterByDuration, filterMovies } from "../../../utils/utils";
 import { errorMessages } from "../../../utils/constants";
 
-function SavedMovies({ favouriteMovies, onDeleteClick, handleErrorMessage, isLoading }) {
+function SavedMovies({ likedMovies, onDeleteClick, handleErrorMessage, isLoading }) {
 
-  const [isShowMoviesFavourite, setIsShowMoviesFavourite] = useState(favouriteMovies);
-  const [isFilteredMovies, setFilteredMovies] = useState(isShowMoviesFavourite);
-  const [isShortMovies, setIsShortMovies] = useState(false); 
+  const [showLikedMovies, setShowLikedMovies] = useState(likedMovies);
+  const [isFilteredMovies, setFilteredMovies] = useState(showLikedMovies);
+  const [shortMovies, setShortMovies] = useState(false); 
   const [isNotFound, setNotFound] = useState(false);
 
   function handleSearchSubmit(value) {
-    const filteredMoviesList = filterMovies(favouriteMovies, value, isShortMovies);
+    const filteredMoviesList = filterMovies(likedMovies, value, shortMovies);
     if (filteredMoviesList.length === 0) {
       handleErrorMessage(errorMessages.notFound);
     } else {
       setFilteredMovies(filteredMoviesList);
-      setIsShowMoviesFavourite(filteredMoviesList);
+      setShowLikedMovies(filteredMoviesList);
       setNotFound(false);
     }
   };
 
   function handleShortMovies() {
-    if (!isShortMovies) {
-      setIsShortMovies(true);
-      localStorage.setItem('isShortFavouriteMovie', true);
-      setIsShowMoviesFavourite(filterByDuration(isFilteredMovies));
+    if (!shortMovies) {
+      setShortMovies(true);
+      localStorage.setItem('shortSavedMovies', true);
+      setShowLikedMovies(filterByDuration(isFilteredMovies));
 
       if (filterByDuration(isFilteredMovies).length === 0) {
         setNotFound(true);
@@ -38,9 +38,9 @@ function SavedMovies({ favouriteMovies, onDeleteClick, handleErrorMessage, isLoa
         setNotFound(false);
       }
     } else {
-      setIsShortMovies(false);
-      localStorage.setItem('isShortFavouriteMovie', false);
-      setIsShowMoviesFavourite(isFilteredMovies);
+      setShortMovies(false);
+      localStorage.setItem('shortSavedMovies', false);
+      setShowLikedMovies(isFilteredMovies);
 
       if (isFilteredMovies.length === 0) {
         setNotFound(true);
@@ -51,13 +51,13 @@ function SavedMovies({ favouriteMovies, onDeleteClick, handleErrorMessage, isLoa
   };
 
   useEffect(() => {
-    setFilteredMovies(favouriteMovies);
-    if (favouriteMovies.length === 0) {
+    setFilteredMovies(likedMovies);
+    if (likedMovies.length === 0) {
       setNotFound(true);
     } else {
       setNotFound(false);
     }
-  }, [favouriteMovies]);
+  }, [likedMovies]);
 
   return(
     <>
@@ -66,14 +66,14 @@ function SavedMovies({ favouriteMovies, onDeleteClick, handleErrorMessage, isLoa
         <SearchForm
           onSearch={handleSearchSubmit}
           onCheckBox={handleShortMovies}
-          isShortMovies={isShortMovies}
-          favouriteMovies={favouriteMovies}
-          setIsShowMoviesFavourites={setIsShowMoviesFavourite}
+          shortMovies={shortMovies}
+          likedMovies={likedMovies}
+          setShowLikedMovies={setShowLikedMovies}
         />
         {isLoading ? <Preloader /> : !isNotFound && 
           <MoviesCardList
-            movies={isShowMoviesFavourite}
-            favouriteMovies={favouriteMovies}        
+            movies={showLikedMovies}
+            likedMovies={likedMovies}        
             onDeleteClick={onDeleteClick}          
           />
         }

@@ -10,17 +10,17 @@ import { filterMovies, filterByDuration } from "../../utils/utils";
 import { getAllMovies } from "../../utils/MoviesApi";
 
 
-function Movies({ onLikeClick, onDeleteClick, favouriteMovies, handleErrorMessage, isLoading, setIsLoading }) {
+function Movies({ onLikeClick, onDeleteClick, likedMovies, handleErrorMessage, isLoading, setIsLoading }) {
 
-  const [isShortMovies, setIsShortMovies] = useState(false);  
-  const [isFilteredMovies, setFilteredMovies] = useState([]);
-  const [isInitialMovies, setInitialMovies] = useState([]);
+  const [isShort, setIsShort] = useState(false);  
+  const [filteredMovies, setFilteredMovies] = useState([]);
+  const [startingMovies, setStartingMovies] = useState([]);
   const [allMovies, setAllMovies] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [error, setError] = useState('');  
 
-  function handleMoviesFilter(movies, userQuery, checkbox) {
-    const moviesList = filterMovies(movies, userQuery, checkbox);
+  function handleMoviesFilter(movies, keyword, checkbox) {
+    const moviesList = filterMovies(movies, keyword, checkbox);
 
     if (moviesList.length === 0) {
       setError(errorMessages.notFound);
@@ -28,7 +28,7 @@ function Movies({ onLikeClick, onDeleteClick, favouriteMovies, handleErrorMessag
     } else {
       setError('');
     }
-    setInitialMovies(moviesList);
+    setStartingMovies(moviesList);
     setFilteredMovies(checkbox ? filterByDuration(moviesList) : moviesList);
     localStorage.setItem('movies', JSON.stringify(moviesList));
     localStorage.setItem('shortMoviesFiltered', JSON.stringify(filterByDuration(moviesList)));
@@ -37,11 +37,11 @@ function Movies({ onLikeClick, onDeleteClick, favouriteMovies, handleErrorMessag
   function handleSearchSubmit(value) {
     setSearchQuery(value);
     localStorage.setItem('searchQuery', value);
-    localStorage.setItem('isShortMovies', isShortMovies);
+    localStorage.setItem('shortMovies', isShort);
     
     if (localStorage.getItem('allMovies')) {
       const allMoviesList = JSON.parse(localStorage.getItem('allMovies'));
-      handleMoviesFilter(allMoviesList, value, isShortMovies);
+      handleMoviesFilter(allMoviesList, value, isShort);
     } else 
       if (!allMovies.length) {
         setIsLoading(true);
@@ -49,7 +49,7 @@ function Movies({ onLikeClick, onDeleteClick, favouriteMovies, handleErrorMessag
           .then((res) => {
             setAllMovies(res);
             localStorage.setItem('allMovies', JSON.stringify(res));
-            handleMoviesFilter(res, value, isShortMovies);
+            handleMoviesFilter(res, value, isShort);
           })
           .catch((err) => {
             console.log(err);
@@ -62,7 +62,7 @@ function Movies({ onLikeClick, onDeleteClick, favouriteMovies, handleErrorMessag
   useEffect(() => {
     if (localStorage.getItem('movies')) {
       const movies = JSON.parse(localStorage.getItem('movies'));
-      setInitialMovies(movies);
+      setStartingMovies(movies);
       if (localStorage.getItem('isShortMovies') === true) {
         setFilteredMovies(filterByDuration(movies));
       } else {
@@ -72,35 +72,35 @@ function Movies({ onLikeClick, onDeleteClick, favouriteMovies, handleErrorMessag
   }, []);
 
   useEffect(() => {
-    if (isFilteredMovies.length === 0 && isShortMovies) {
+    if (filteredMovies.length === 0 && isShort) {
       setError(errorMessages.notFound);
       handleErrorMessage(errorMessages.notFound);
     } else {
       setError('');      
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFilteredMovies.length, isShortMovies]);
+  }, [filteredMovies.length, isShort]);
 
   useEffect(() => {
-    if (localStorage.getItem('isShortMovies') === true) {
-      setIsShortMovies(true);
+    if (localStorage.getItem('shortMovies') === true) {
+      setIsShort(true);
       if (localStorage.getItem('shortMoviesFiltered')) {
         const shortMovies = JSON.parse(localStorage.getItem('shortMoviesFiltered'));
         setFilteredMovies(shortMovies);
       }
     } else {
-      setIsShortMovies(false);
+      setIsShort(false);
     }
   }, []); 
 
   function handleShortMovies() {
-    setIsShortMovies(!isShortMovies);
-    if (!isShortMovies) {
-      setFilteredMovies(filterByDuration(isInitialMovies));
+    setIsShort(!isShort);
+    if (!isShort) {
+      setFilteredMovies(filterByDuration(startingMovies));
     } else {
-      setFilteredMovies(isInitialMovies);
+      setFilteredMovies(startingMovies);
     }
-    localStorage.setItem('isShortMovies', isShortMovies);
+    localStorage.setItem('shortMovies', isShort);
   };
 
   return (
@@ -110,14 +110,14 @@ function Movies({ onLikeClick, onDeleteClick, favouriteMovies, handleErrorMessag
         <SearchForm        
           onSearch={handleSearchSubmit}
           onCheckBox={handleShortMovies}
-          isShortMovies={isShortMovies}
+          isShortMovies={isShort}
           searchQuery={searchQuery}
           isLoading={isLoading}
         />  
         {isLoading && !error && <Preloader />}          
         <MoviesCardList 
-          movies={isFilteredMovies}
-          favouriteMovies={favouriteMovies}
+          movies={filteredMovies}
+          likedMovies={likedMovies}
           onLikeClick={onLikeClick}
           onDeleteClick={onDeleteClick}
         />        
