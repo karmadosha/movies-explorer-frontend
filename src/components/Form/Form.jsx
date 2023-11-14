@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import useFormValidation from "../../hooks/useFormValidation";
 import { errorMessages } from "../../utils/constants";
 
-function Form({ inputUserName, submitBtn, linkText, question, link, onSubmit }) {
+function Form({ inputUserName, submitBtn, linkText, question, link, onSubmit, isLoading }) {
   const {values, handleChange, errors, isValid} = useFormValidation();  
   
   function handleSubmit(evt) {
@@ -13,7 +13,7 @@ function Form({ inputUserName, submitBtn, linkText, question, link, onSubmit }) 
 };
 
   return(
-    <form className="auth-form" onSubmit={handleSubmit} noValidate >
+    <form className="auth-form" onSubmit={handleSubmit} disabled={isLoading} noValidate >
       <div className="auth-form__container">
         {inputUserName && 
           <label className="auth-form__label">Имя
@@ -63,7 +63,7 @@ function Form({ inputUserName, submitBtn, linkText, question, link, onSubmit }) 
         <button
          className={`auth-form__btn ${!isValid  && 'auth-form__btn_disabled'}`} 
          type='submit' 
-         disabled={!isValid}>
+         disabled={!isValid || isLoading}>
           {submitBtn}
         </button>
         <p className='auth-form__question'>{question}

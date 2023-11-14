@@ -94,14 +94,15 @@ function App() {
   };
 
   function handleLogin(values) {
+    setIsLoading(true);
+    console.log(isLoading);
     const { email, password } = values;
-    setIsLoading(true);  
+    
     api.signin({ email, password })
       .then((res) => {
         if (res) {          
           setIsLoggedIn(true);
-          localStorage.setItem('token', res.token);
-          console.log(res);
+          localStorage.setItem('token', res.token);         
           setCurrentUser(res);                   
           handleInfoMessage(location.pathname === '/signup' ? infoMessages.register : infoMessages.login );
           navigate('/movies', { replace: true });
@@ -113,6 +114,7 @@ function App() {
       })
       .finally(() => {
         setIsLoading(false);
+        console.log(isLoading);
       })
   };
 
@@ -152,9 +154,18 @@ function App() {
   };
  
   function handleDeleteMovie(movie) {
-    api.deleteMovie(movie._id)
+    const likedMovie = likedMovies.find((m) => 
+      m.movieId === movie.id || m.movieId === movie.movieId
+    );
+    api.deleteMovie(likedMovie._id)
       .then(() => {
-        const newLikedMovies = likedMovies.filter((m) => m._id !== movie._id);        
+        const newLikedMovies = likedMovies.filter((m) => {
+          if (movie.id === m.movieId || movie.movieId === m.movieId) {
+            return false;
+          } else {
+            return true;
+          }
+        })
         setLikedMovies(newLikedMovies);
         handleInfoMessage(infoMessages.deleteMovie);
       })
@@ -169,11 +180,11 @@ function App() {
             <Route path='/signup'
                element={isLoggedIn 
                  ? <Navigate to='/' /> 
-                 : <Register onRegister={handleRegister} onLoading={isLoading}/>} />
+                 : <Register onRegister={handleRegister} isLoading={isLoading}/>} />
               <Route path='/signin'
                  element={isLoggedIn 
                    ? <Navigate to='/' /> 
-                   : <Login onLogin={handleLogin} onLoading={isLoading}/>} />
+                   : <Login onLogin={handleLogin} isLoading={isLoading}/>} />
               <Route path='/' 
                 element={<Main isLoggedIn={isLoggedIn} />
                 }
@@ -185,7 +196,7 @@ function App() {
                   user={currentUser}
                   onLogout={handleLogout}
                   onProfileUpdate={handleUserInfoUpdate}
-                  onLoading={isLoading}                  
+                  isLoading={isLoading}                  
                   handleInfoMessage={handleInfoMessage}
                   handleErrorMessage={handleErrorMessage}
                 />

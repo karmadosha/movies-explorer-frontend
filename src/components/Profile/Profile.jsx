@@ -50,7 +50,7 @@ function Profile({ onProfileUpdate, onLogout, onLoading, handleInfoMessage, hand
       <Header isLoggedIn={true} />    
       <section className="profile">        
         <h1 className="profile__greeting">Привет, {currentUser?.name}!</h1>
-        <form className="profile__form" isDisabled={onLoading} noValidate>
+        <form className="profile__form" noValidate>
           <div className="profile__container">
             <p className="profile__container-title">Имя</p>
             {isEditable ? 
