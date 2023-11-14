@@ -17,7 +17,7 @@ function Register({ onRegister, isLoading }) {
             link={'/signin'}
             linkText={'Войти'}
             onSubmit={onRegister}
-            disabled={isLoading}
+            isLoading={isLoading}
           />
         </div>
       </section>

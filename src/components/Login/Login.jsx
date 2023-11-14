@@ -15,7 +15,7 @@ function Login({ onLogin, isLoading }) {
           link={'/signup'}
           linkText={'Регистрация'}
           onSubmit={onLogin}
-          disabled={isLoading}
+          isLoading={isLoading}
         />
       </section>
     </main>

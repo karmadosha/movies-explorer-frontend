@@ -13,7 +13,7 @@ function Form({ inputUserName, submitBtn, linkText, question, link, onSubmit, is
 };
 
   return(
-    <form className="auth-form" onSubmit={handleSubmit} disabled={isLoading} noValidate >
+    <form className="auth-form" onSubmit={handleSubmit} isDisabled={isLoading} noValidate >
       <div className="auth-form__container">
         {inputUserName && 
           <label className="auth-form__label">Имя
@@ -61,7 +61,7 @@ function Form({ inputUserName, submitBtn, linkText, question, link, onSubmit, is
       </div>            
       <div className="auth-form__bottom">
         <button
-         className={`auth-form__btn ${!isValid  && 'auth-form__btn_disabled'}`} 
+         className={`auth-form__btn ${(!isValid || isLoading) && 'auth-form__btn_disabled'}`} 
          type='submit' 
          disabled={!isValid || isLoading}>
           {submitBtn}
