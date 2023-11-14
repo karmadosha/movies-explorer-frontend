@@ -126,7 +126,7 @@ function App() {
   };  
 
   function handleUserInfoUpdate({name, email}) {
-    isLoading(true);  
+    setIsLoading(true);  
     api.updateUserInfo({name, email})
       .then((res) => {
         setCurrentUser(res);
@@ -136,7 +136,7 @@ function App() {
         err === 'Ошибка: 409' ? handleErrorMessage(errorMessages.sameEmail) : handleErrorMessage(errorMessages.profileEditFailed)
       })
       .finally(() => {
-        isLoading(false);
+        setIsLoading(false);
       })
   };
 
