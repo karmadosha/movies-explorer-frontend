@@ -17,11 +17,11 @@ export const getLikedMovie = (list, movie) => {
   })
 };
 
-export const filterMovies = (movies, userQuery, shortMovies) => {
+export const filterMovies = (movies, keyword, shortMovies) => {
   const moviesBySearch = movies.filter((movie) => {
     const movieRu = String(movie.nameRU).toLowerCase().trim();
     const movieEn = String(movie.nameEN).toLowerCase().trim();
-    const userMovie = userQuery.toLowerCase().trim();
+    const userMovie = keyword.toLowerCase().trim();
     return (
       movieRu.indexOf(userMovie) !== -1 || movieEn.indexOf(userMovie) !== -1
     );

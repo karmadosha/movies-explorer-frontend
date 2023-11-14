@@ -49,10 +49,7 @@ function App() {
         .then((res) => {
           if (res) {
             setIsLoggedIn(true);
-            setCurrentUser(res);              
-            if (location.pathname !== '/signin') {
-              navigate(location.pathname, { replace: true });
-            }
+            setCurrentUser(res);
           }
         })
         .catch(err => console.log(err));
@@ -84,7 +81,7 @@ function App() {
 
   function handleRegister(values) {
     const { name, email, password } = values;
-    isLoading(true);  
+    setIsLoading(true);  
     api.register({ name, email, password })
       .then(() => handleLogin({ email, password}))
       .catch((err) => {
@@ -92,13 +89,13 @@ function App() {
         (err === 'Ошибка: 409') ? handleErrorMessage(errorMessages.sameEmail) : handleErrorMessage(errorMessages.registryError);
       })
       .finally(() => {
-        isLoading(false);
+        setIsLoading(false);
       })   
   };
 
   function handleLogin(values) {
     const { email, password } = values;
-    isLoading(true);  
+    setIsLoading(true);  
     api.signin({ email, password })
       .then((res) => {
         if (res) {          
@@ -115,7 +112,7 @@ function App() {
         (err === 'Ошика: 401') ? handleErrorMessage(errorMessages.wrongNamePassword) : handleErrorMessage(errorMessages.authError);
       })
       .finally(() => {
-        isLoading(false);
+        setIsLoading(false);
       })
   };
 

@@ -9,23 +9,24 @@ import { errorMessages } from "../../utils/constants";
 import { filterMovies, filterByDuration } from "../../utils/utils";
 import { getAllMovies } from "../../utils/MoviesApi";
 
-function Movies({ onLikeClick, onDeleteClick, likedMovies, isLoading, setIsLoading }) {
+function Movies({ onLikeClick, onDeleteClick, likedMovies, isLoading, setIsLoading, handleErrorMessage }) {
 
   const [isShort, setIsShort] = useState(false);  
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [startingMovies, setStartingMovies] = useState([]);
   const [allMovies, setAllMovies] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(localStorage.getItem('searchQuery') || '');
+  const [searchQuery, setSearchQuery] = useState('');
   const [error, setError] = useState(false); 
 
-  function handleMoviesFilter(movies, userQuery, checkbox) {
-    const moviesList = filterMovies(movies, userQuery, checkbox);
+  function handleMoviesFilter(movies, keyword, checkbox) {
+    const moviesList = filterMovies(movies, keyword, checkbox);   
 
-    if (moviesList.length === 0) {
-      setError(true);           
+    if (moviesList.length < 1) {
+      setError(true);               
     } else {
-      setError(false);
+      setError(false);      
     }
+    
     setStartingMovies(moviesList);
     setFilteredMovies(checkbox ? filterByDuration(moviesList) : moviesList);
     localStorage.setItem('movies', JSON.stringify(moviesList));
@@ -51,7 +52,7 @@ function Movies({ onLikeClick, onDeleteClick, likedMovies, isLoading, setIsLoadi
           })
           .catch((err) => {
             console.log(err);
-            
+            handleErrorMessage(errorMessages.searchError);
           })
           .finally(() => setIsLoading(false));
       }
@@ -70,7 +71,7 @@ function Movies({ onLikeClick, onDeleteClick, likedMovies, isLoading, setIsLoadi
   }, []);
 
   useEffect(() => {
-    if (filteredMovies.length === 0 && isShort) {
+    if (filteredMovies.length === 0) {
       setError(true);      
     } else {
       setError(false);      
@@ -88,7 +89,7 @@ function Movies({ onLikeClick, onDeleteClick, likedMovies, isLoading, setIsLoadi
     } else {
       setIsShort(false);
     }
-  }, []); 
+  }, []);   
 
   function handleShortMovies() {
     setIsShort(!isShort);
@@ -113,12 +114,13 @@ function Movies({ onLikeClick, onDeleteClick, likedMovies, isLoading, setIsLoadi
         />  
         {isLoading && !error && <Preloader />}
         {error
-          ? <span className="movies__error">{errorMessages.notFound}</span>
-          : <MoviesCardList 
+          ? <span className="movies__error">{errorMessages.notFound}</span> : " "}
+        {!error && <MoviesCardList 
               movies={filteredMovies}
               likedMovies={likedMovies}
               onLikeClick={onLikeClick}
               onDeleteClick={onDeleteClick}
+
             />
         }     
       </main>

@@ -3,7 +3,7 @@ import './SearchForm.css';
 import { useLocation } from "react-router-dom";
 import { errorMessages } from "../../../utils/constants";
 
-function SearchForm({ onSearch, onCheckBox, isShort, likedMovies, setShowLikedMovies }) {
+function SearchForm({ onSearch, onCheckBox, isShort }) {
   const location = useLocation();    
   const [searchInput, setSearchInput] = useState('');
   const [error, setError] = useState(false);
@@ -25,13 +25,8 @@ function SearchForm({ onSearch, onCheckBox, isShort, likedMovies, setShowLikedMo
         setSearchInput(searchQuery);
       }     
     }
-  }, [location.pathname]); 
-  
-  /*useEffect(() => {
-    if (location.pathname === '/saved-movies' && !searchInput) {
-      setShowLikedMovies(likedMovies);
-    }
-  }, [likedMovies, location.pathname, searchInput, setShowLikedMovies]);*/
+  }, [location.pathname]);  
+ 
 
   return(
     <section className="searchform">
