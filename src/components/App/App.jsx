@@ -21,7 +21,7 @@ function App() {
   const [likedMovies, setLikedMovies] = useState([]);  
   const [isInfoTooltipOpen, setInfoTooltipOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [infoMessage, setInfoMessage] = useState('');
+  const [infoMessage, setInfoMessage] = useState('');  
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ function App() {
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
-      const token = localStorage.getItem('token');      
+      const token = localStorage.getItem('token');          
       api.checkToken(token)
         .then((res) => {
           if (res) {
@@ -84,7 +84,7 @@ function App() {
 
   function handleRegister(values) {
     const { name, email, password } = values;
-    setIsLoading(true);  
+    isLoading(true);  
     api.register({ name, email, password })
       .then(() => handleLogin({ email, password}))
       .catch((err) => {
@@ -92,13 +92,13 @@ function App() {
         (err === 'Ошибка: 409') ? handleErrorMessage(errorMessages.sameEmail) : handleErrorMessage(errorMessages.registryError);
       })
       .finally(() => {
-        setIsLoading(false);
+        isLoading(false);
       })   
   };
 
   function handleLogin(values) {
     const { email, password } = values;
-    setIsLoading(true);  
+    isLoading(true);  
     api.signin({ email, password })
       .then((res) => {
         if (res) {          
@@ -115,21 +115,21 @@ function App() {
         (err === 'Ошика: 401') ? handleErrorMessage(errorMessages.wrongNamePassword) : handleErrorMessage(errorMessages.authError);
       })
       .finally(() => {
-        setIsLoading(false);
+        isLoading(false);
       })
   };
 
   function handleLogout() {
     setIsLoggedIn(false);
-    setCurrentUser({});    
+    setCurrentUser({});
+    navigate('/', { replace: true }); 
     localStorage.clear();
     setLikedMovies([]);
-    handleInfoMessage(infoMessages.signout); 
-    navigate('/', { replace: true });
-  };
+    handleInfoMessage(infoMessages.signout);    
+  };  
 
   function handleUserInfoUpdate({name, email}) {
-    setIsLoading(true);  
+    isLoading(true);  
     api.updateUserInfo({name, email})
       .then((res) => {
         setCurrentUser(res);
@@ -139,7 +139,7 @@ function App() {
         err === 'Ошибка: 409' ? handleErrorMessage(errorMessages.sameEmail) : handleErrorMessage(errorMessages.profileEditFailed)
       })
       .finally(() => {
-        setIsLoading(false);
+        isLoading(false);
       })
   };
 
@@ -153,27 +153,16 @@ function App() {
         console.log(err);        
       })
   };
-
+ 
   function handleDeleteMovie(movie) {
-    const favouriteMovie = likedMovies.find((m) => 
-    m.movieId === movie.id || m.movieId === movie.movieId);
-
-    api.deleteMovie(favouriteMovie._id)
+    api.deleteMovie(movie._id)
       .then(() => {
-        const newFavouriteMovies = likedMovies.filter((m) => {
-          if (movie.id === m.movieId || movie.movieId === m.movieId) {
-            return false;
-          } else {
-            return true;
-          }
-        })
-        setLikedMovies(newFavouriteMovies);
+        const newLikedMovies = likedMovies.filter((m) => m._id !== movie._id);        
+        setLikedMovies(newLikedMovies);
         handleInfoMessage(infoMessages.deleteMovie);
       })
-      .catch((err) => {
-        console.log(err);
-      })
-  }  
+      .catch(err => console.log(err));
+  }
   
   return (
     <CurrentUserContext.Provider value={currentUser}>            
@@ -181,10 +170,15 @@ function App() {
         <div className="page">
           <Routes>
             <Route path='/signup'
-               element={isLoggedIn ? <Navigate to='/' /> : <Register onRegister={handleRegister}/>} />
+               element={isLoggedIn 
+                 ? <Navigate to='/' /> 
+                 : <Register onRegister={handleRegister} onLoading={isLoading}/>} />
               <Route path='/signin'
-               element={isLoggedIn ? <Navigate to='/' /> : <Login onLogin={handleLogin}/>} />
-              <Route path='/' element={<Main isLoggedIn={isLoggedIn} />
+                 element={isLoggedIn 
+                   ? <Navigate to='/' /> 
+                   : <Login onLogin={handleLogin} onLoading={isLoading}/>} />
+              <Route path='/' 
+                element={<Main isLoggedIn={isLoggedIn} />
                 }
               />
               <Route path='/profile' element={
@@ -194,8 +188,7 @@ function App() {
                   user={currentUser}
                   onLogout={handleLogout}
                   onProfileUpdate={handleUserInfoUpdate}
-                  isLoading={isLoading}
-                  setIsLoading={setIsLoading}
+                  onLoading={isLoading}                  
                   handleInfoMessage={handleInfoMessage}
                   handleErrorMessage={handleErrorMessage}
                 />
@@ -223,7 +216,7 @@ function App() {
                   element={SavedMovies} 
                   isLoggedIn={isLoggedIn}                     
                   likedMovies={likedMovies}
-                  setFavouriteMovies={setLikedMovies}
+                  setLikedMovies={setLikedMovies}
                   isLoading={isLoading}
                   setIsLoading={setIsLoading}
                   onDeleteClick={handleDeleteMovie}

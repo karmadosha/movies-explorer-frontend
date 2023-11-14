@@ -4,25 +4,24 @@ import SearchForm from "../SearchForm/SearchForm";
 import MoviesCardList from "../MoviesCardList/MoviesCardList";
 import Header from "../../Header/Header";
 import Footer from "../../Footer/Footer";
-import Preloader from "../Preloader/Preloader";
 import { filterByDuration, filterMovies } from "../../../utils/utils";
 import { errorMessages } from "../../../utils/constants";
 
-function SavedMovies({ likedMovies, onDeleteClick, handleErrorMessage, isLoading }) {
+function SavedMovies({ likedMovies, onDeleteClick, isShort }) {
 
   const [showLikedMovies, setShowLikedMovies] = useState(likedMovies);
-  const [isFilteredMovies, setFilteredMovies] = useState(showLikedMovies);
+  const [filteredMovies, setFilteredMovies] = useState(showLikedMovies);
   const [shortMovies, setShortMovies] = useState(false); 
-  const [isNotFound, setNotFound] = useState(false);
+  const [error, setError] = useState(false);
 
   function handleSearchSubmit(value) {
     const filteredMoviesList = filterMovies(likedMovies, value, shortMovies);
     if (filteredMoviesList.length === 0) {
-      handleErrorMessage(errorMessages.notFound);
+      setError(true);
     } else {
       setFilteredMovies(filteredMoviesList);
       setShowLikedMovies(filteredMoviesList);
-      setNotFound(false);
+      setError(false);
     }
   };
 
@@ -30,22 +29,22 @@ function SavedMovies({ likedMovies, onDeleteClick, handleErrorMessage, isLoading
     if (!shortMovies) {
       setShortMovies(true);
       localStorage.setItem('shortSavedMovies', true);
-      setShowLikedMovies(filterByDuration(isFilteredMovies));
+      setShowLikedMovies(filterByDuration(filteredMovies));
 
-      if (filterByDuration(isFilteredMovies).length === 0) {
-        setNotFound(true);
+      if (filterByDuration(filteredMovies).length === 0) {
+        setError(true);
       } else {
-        setNotFound(false);
+        setError(false);
       }
     } else {
       setShortMovies(false);
       localStorage.setItem('shortSavedMovies', false);
-      setShowLikedMovies(isFilteredMovies);
+      setShowLikedMovies(filteredMovies);
 
-      if (isFilteredMovies.length === 0) {
-        setNotFound(true);
+      if (filteredMovies.length === 0) {
+        setError(true);
       } else {
-        setNotFound(false);
+        setError(false);
       }
     }
   };
@@ -53,9 +52,9 @@ function SavedMovies({ likedMovies, onDeleteClick, handleErrorMessage, isLoading
   useEffect(() => {
     setFilteredMovies(likedMovies);
     if (likedMovies.length === 0) {
-      setNotFound(true);
+      setError(true);
     } else {
-      setNotFound(false);
+      setError(false);
     }
   }, [likedMovies]);
 
@@ -66,21 +65,22 @@ function SavedMovies({ likedMovies, onDeleteClick, handleErrorMessage, isLoading
         <SearchForm
           onSearch={handleSearchSubmit}
           onCheckBox={handleShortMovies}
-          shortMovies={shortMovies}
+          shortMovies={isShort}
           likedMovies={likedMovies}
-          setShowLikedMovies={setShowLikedMovies}
-        />
-        {isLoading ? <Preloader /> : !isNotFound && 
-          <MoviesCardList
-            movies={showLikedMovies}
-            likedMovies={likedMovies}        
-            onDeleteClick={onDeleteClick}          
-          />
+        />              
+        {error
+          ? <span className="saved-movies__error">{errorMessages.notFound}</span>
+          : <MoviesCardList
+              movies={showLikedMovies}
+              likedMovies={likedMovies}        
+              onDeleteClick={onDeleteClick}          
+            />
         }
         </main>
       <Footer />
     </>    
   )
+  
 };
 
 export default SavedMovies;

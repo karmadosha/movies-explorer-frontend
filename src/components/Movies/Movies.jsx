@@ -9,24 +9,22 @@ import { errorMessages } from "../../utils/constants";
 import { filterMovies, filterByDuration } from "../../utils/utils";
 import { getAllMovies } from "../../utils/MoviesApi";
 
-
-function Movies({ onLikeClick, onDeleteClick, likedMovies, handleErrorMessage, isLoading, setIsLoading }) {
+function Movies({ onLikeClick, onDeleteClick, likedMovies, isLoading, setIsLoading }) {
 
   const [isShort, setIsShort] = useState(false);  
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [startingMovies, setStartingMovies] = useState([]);
   const [allMovies, setAllMovies] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [error, setError] = useState('');  
+  const [searchQuery, setSearchQuery] = useState(localStorage.getItem('searchQuery') || '');
+  const [error, setError] = useState(false); 
 
-  function handleMoviesFilter(movies, keyword, checkbox) {
-    const moviesList = filterMovies(movies, keyword, checkbox);
+  function handleMoviesFilter(movies, userQuery, checkbox) {
+    const moviesList = filterMovies(movies, userQuery, checkbox);
 
     if (moviesList.length === 0) {
-      setError(errorMessages.notFound);
-      handleErrorMessage(errorMessages.notFound);      
+      setError(true);           
     } else {
-      setError('');
+      setError(false);
     }
     setStartingMovies(moviesList);
     setFilteredMovies(checkbox ? filterByDuration(moviesList) : moviesList);
@@ -38,7 +36,7 @@ function Movies({ onLikeClick, onDeleteClick, likedMovies, handleErrorMessage, i
     setSearchQuery(value);
     localStorage.setItem('searchQuery', value);
     localStorage.setItem('shortMovies', isShort);
-    
+        
     if (localStorage.getItem('allMovies')) {
       const allMoviesList = JSON.parse(localStorage.getItem('allMovies'));
       handleMoviesFilter(allMoviesList, value, isShort);
@@ -53,7 +51,7 @@ function Movies({ onLikeClick, onDeleteClick, likedMovies, handleErrorMessage, i
           })
           .catch((err) => {
             console.log(err);
-            handleErrorMessage(errorMessages.searchError);
+            
           })
           .finally(() => setIsLoading(false));
       }
@@ -63,7 +61,7 @@ function Movies({ onLikeClick, onDeleteClick, likedMovies, handleErrorMessage, i
     if (localStorage.getItem('movies')) {
       const movies = JSON.parse(localStorage.getItem('movies'));
       setStartingMovies(movies);
-      if (localStorage.getItem('isShortMovies') === true) {
+      if (localStorage.getItem('shortMovies') === true) {
         setFilteredMovies(filterByDuration(movies));
       } else {
         setFilteredMovies(movies);
@@ -73,16 +71,15 @@ function Movies({ onLikeClick, onDeleteClick, likedMovies, handleErrorMessage, i
 
   useEffect(() => {
     if (filteredMovies.length === 0 && isShort) {
-      setError(errorMessages.notFound);
-      handleErrorMessage(errorMessages.notFound);
+      setError(true);      
     } else {
-      setError('');      
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+      setError(false);      
+    }  
   }, [filteredMovies.length, isShort]);
 
   useEffect(() => {
-    if (localStorage.getItem('shortMovies') === true) {
+    const checkbox = JSON.parse(localStorage.getItem('shortMovies'));
+    if (checkbox) {
       setIsShort(true);
       if (localStorage.getItem('shortMoviesFiltered')) {
         const shortMovies = JSON.parse(localStorage.getItem('shortMoviesFiltered'));
@@ -100,7 +97,7 @@ function Movies({ onLikeClick, onDeleteClick, likedMovies, handleErrorMessage, i
     } else {
       setFilteredMovies(startingMovies);
     }
-    localStorage.setItem('shortMovies', isShort);
+    localStorage.setItem('shortMovies', !isShort);
   };
 
   return (
@@ -109,18 +106,21 @@ function Movies({ onLikeClick, onDeleteClick, likedMovies, handleErrorMessage, i
       <main className="movies">
         <SearchForm        
           onSearch={handleSearchSubmit}
-          onCheckBox={handleShortMovies}
-          isShortMovies={isShort}
-          searchQuery={searchQuery}
+          onCheckBox={handleShortMovies}          
+          isShort={isShort}
+          searchQuery={searchQuery}       
           isLoading={isLoading}
         />  
-        {isLoading && !error && <Preloader />}          
-        <MoviesCardList 
-          movies={filteredMovies}
-          likedMovies={likedMovies}
-          onLikeClick={onLikeClick}
-          onDeleteClick={onDeleteClick}
-        />        
+        {isLoading && !error && <Preloader />}
+        {error
+          ? <span className="movies__error">{errorMessages.notFound}</span>
+          : <MoviesCardList 
+              movies={filteredMovies}
+              likedMovies={likedMovies}
+              onLikeClick={onLikeClick}
+              onDeleteClick={onDeleteClick}
+            />
+        }     
       </main>
       <Footer />
     </>        

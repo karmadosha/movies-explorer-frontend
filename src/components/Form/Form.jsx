@@ -5,7 +5,7 @@ import useFormValidation from "../../hooks/useFormValidation";
 import { errorMessages } from "../../utils/constants";
 
 function Form({ inputUserName, submitBtn, linkText, question, link, onSubmit }) {
-  const {values, handleChange, errors, isValid} = useFormValidation();
+  const {values, handleChange, errors, isValid} = useFormValidation();  
   
   function handleSubmit(evt) {
     evt.preventDefault();
@@ -61,9 +61,11 @@ function Form({ inputUserName, submitBtn, linkText, question, link, onSubmit }) 
       </div>            
       <div className="auth-form__bottom">
         <button
-         className={`auth-form__btn ${!isValid && 'auth-form__btn_disabled'}`} 
+         className={`auth-form__btn ${!isValid  && 'auth-form__btn_disabled'}`} 
          type='submit' 
-         disabled={!isValid}>{submitBtn}</button>
+         disabled={!isValid}>
+          {submitBtn}
+        </button>
         <p className='auth-form__question'>{question}
          <Link className='auth-form__link' to={link}>{linkText}</Link>
         </p>
