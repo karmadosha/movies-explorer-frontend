@@ -71,7 +71,7 @@ function Movies({ onLikeClick, onDeleteClick, likedMovies, isLoading, setIsLoadi
   }, []);
 
   useEffect(() => {
-    if (filteredMovies.length === 0) {
+    if (filteredMovies.length === 0 && isShort) {
       setError(true);      
     } else {
       setError(false);      

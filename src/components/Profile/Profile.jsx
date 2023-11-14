@@ -6,7 +6,7 @@ import useFormValidation from "../../hooks/useFormValidation";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import { errorMessages } from "../../utils/constants";
 
-function Profile({ onProfileUpdate, onLogout, onLoading, handleInfoMessage, handleErrorMessage }) {
+function Profile({ onProfileUpdate, onLogout, isLoading, handleInfoMessage, handleErrorMessage }) {
   const  {values, errors, isValid, handleChange, setValues, setIsValid } = useFormValidation(); 
   const [isEditable, setIsEditable] = useState(false);
   const currentUser = useContext(CurrentUserContext);
@@ -111,7 +111,7 @@ function Profile({ onProfileUpdate, onLogout, onLoading, handleInfoMessage, hand
                 type="submit"
                 className={`profile__save-btn ${!isValid && 'profile__save-btn_disabled'}`}
                 aria-label="кнопка сохранить"
-                disabled={!isValid || onLoading}
+                disabled={!isValid || isLoading}
                 onClick={handleSaveClick}>
                   Сохранить
                 </button>

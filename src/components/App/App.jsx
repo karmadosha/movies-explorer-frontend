@@ -94,8 +94,7 @@ function App() {
   };
 
   function handleLogin(values) {
-    setIsLoading(true);
-    console.log(isLoading);
+    setIsLoading(true);   
     const { email, password } = values;
     
     api.signin({ email, password })
@@ -113,8 +112,7 @@ function App() {
         (err === 'Ошика: 401') ? handleErrorMessage(errorMessages.wrongNamePassword) : handleErrorMessage(errorMessages.authError);
       })
       .finally(() => {
-        setIsLoading(false);
-        console.log(isLoading);
+        setIsLoading(false);        
       })
   };
 
