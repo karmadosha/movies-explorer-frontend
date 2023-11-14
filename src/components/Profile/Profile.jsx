@@ -100,7 +100,7 @@ function Profile({ onProfileUpdate, onLogout, isLoading, handleInfoMessage, hand
                 </button>
                 <Link
                  className="profile__logout-link" 
-                 to="/signin"
+                 to="/"
                  onClick={onLogout}
                  >Выйти из аккаунта</Link>
               </>        

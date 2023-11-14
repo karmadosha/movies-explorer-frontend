@@ -118,10 +118,9 @@ function App() {
 
   function handleLogout() {
     setIsLoggedIn(false);
-    setCurrentUser({});
-    navigate('/', { replace: true }); 
+    setCurrentUser({});     
     localStorage.clear();
-    setLikedMovies([]);
+    navigate('/');
     handleInfoMessage(infoMessages.signout);    
   };  
 
