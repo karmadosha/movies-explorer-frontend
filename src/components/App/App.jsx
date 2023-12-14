@@ -50,6 +50,9 @@ function App() {
           if (res) {
             setIsLoggedIn(true);
             setCurrentUser(res);
+            if (location.pathname !== '/signin') {
+              navigate(location.pathname, { replace: true });
+            }
           }
         })
         .catch(err => console.log(err));

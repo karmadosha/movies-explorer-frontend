@@ -9,8 +9,7 @@ import { errorMessages } from "../../../utils/constants";
 
 function SavedMovies({ likedMovies, onDeleteClick, isShort }) {
 
-  const [showLikedMovies, setShowLikedMovies] = useState(likedMovies);
-  const [filteredMovies, setFilteredMovies] = useState(showLikedMovies);
+  const [filteredMovies, setFilteredMovies] = useState(likedMovies);
   const [shortMovies, setShortMovies] = useState(false); 
   const [error, setError] = useState(false);
 
@@ -19,8 +18,7 @@ function SavedMovies({ likedMovies, onDeleteClick, isShort }) {
     if (filteredMoviesList.length === 0) {
       setError(true);
     } else {
-      setFilteredMovies(filteredMoviesList);
-      setShowLikedMovies(filteredMoviesList);
+      setFilteredMovies(filteredMoviesList);      
       setError(false);
     }
   };
@@ -29,7 +27,7 @@ function SavedMovies({ likedMovies, onDeleteClick, isShort }) {
     if (!shortMovies) {
       setShortMovies(true);
       localStorage.setItem('shortSavedMovies', true);
-      setShowLikedMovies(filterByDuration(filteredMovies));
+      setFilteredMovies(filterByDuration(filteredMovies));
 
       if (filterByDuration(filteredMovies).length === 0) {
         setError(true);
@@ -39,7 +37,7 @@ function SavedMovies({ likedMovies, onDeleteClick, isShort }) {
     } else {
       setShortMovies(false);
       localStorage.setItem('shortSavedMovies', false);
-      setShowLikedMovies(filteredMovies);
+      setFilteredMovies(filteredMovies);
 
       if (filteredMovies.length === 0) {
         setError(true);
@@ -56,7 +54,7 @@ function SavedMovies({ likedMovies, onDeleteClick, isShort }) {
     } else {
       setError(false);
     }
-  }, [likedMovies]);
+  }, [likedMovies]);  
 
   return(
     <>
@@ -71,7 +69,7 @@ function SavedMovies({ likedMovies, onDeleteClick, isShort }) {
         {error
           ? <span className="saved-movies__error">{errorMessages.notFound}</span>
           : <MoviesCardList
-              movies={showLikedMovies}
+              movies={filteredMovies}
               likedMovies={likedMovies}        
               onDeleteClick={onDeleteClick}          
             />
