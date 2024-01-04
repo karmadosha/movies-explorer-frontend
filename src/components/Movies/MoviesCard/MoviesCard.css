@@ -77,10 +77,6 @@
   background-color: transparent;
   border: none;
   cursor: pointer;
-  visibility: hidden;
-}
-.movie__info:hover .movie__delete-btn {
-  visibility: visible;
 }
 
 .movie__delete-btn:hover {
@@ -110,6 +106,7 @@
   }  
   .movie__delete-btn {    
     margin-top: 8px;
+    visibility: visible;
   }
 }
 

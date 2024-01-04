@@ -1,50 +1,58 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import './MoviesCard.css';
+import { MOVIES_URL_IMG } from "../../../utils/constants";
+import { formatMovieDuration } from "../../../utils/utils";
 
-function MoviesCard({ movie, onDeleteClick }) {
+function MoviesCard({ movie, favourites, onLikeClick, onDeleteClick }) {  
   const location = useLocation();
-  const [isSaved, setIsSaved] = React.useState(false);
-  function handleSaveClick() {
-    setIsSaved(true);
-  };
-  const movieSaveBtnClassName = (`movie__save-icon ${isSaved === true ? 'movie__save-icon_active' : ''}`);
-  
-  function handleDeleteClick() {
-    onDeleteClick();
+  const imageUrl = `${MOVIES_URL_IMG}${movie.image.url}`;  
+  const movieSaveBtnClassName = (`movie__save-icon ${favourites ? 'movie__save-icon_active' : ''}`);
+
+  function handleLike() {
+    onLikeClick(movie);
   };
 
-  function formatMovieDuration(number) {
-    const hours = Math.floor(number / 60);
-    const minutes = Math.round(((number / 60) - hours) * 60);
-    if (hours === 0) {return `${minutes}мин.`}
-    else return( `${hours}ч. ${minutes}мин.`);
+  function handleDelete() {
+    onDeleteClick(movie);
   };
+
+  function handleChangeMovieStatus() {   
+    if (favourites) {  
+    handleDelete();
+    } else {
+      handleLike();
+    }   
+  };  
 
   return(
-    <li className="movie">
-      <img
-       className="movie__pic"
-       src={movie.image}
-       alt={movie.name}
-       /*onClick={handleMovieClick}*/ />
-      
+    <li className="movie" key={movie.id}>
+      <a href={movie.trailerLink}
+        target="_blank"
+        rel="noreferrer">
+          <img
+           className="movie__pic"
+           src={location.pathname === '/movies' ? imageUrl : movie.image}
+           alt={`Постер фильма ${movie.nameRU}`}
+          />
+      </a>
       <div className="movie__info">
         <div className="movie__info-group">
-          <h2 className="movie__title">{movie.name}</h2>
+          <h2 className="movie__title">{movie.nameRU}</h2>
           <p className="movie__duration">{formatMovieDuration(movie.duration)}</p>
         </div>
-        {location.pathname === '/movies' ? 
-          <button
+        {location.pathname === '/movies' 
+          ? <button
             type="button" 
             className={movieSaveBtnClassName}
             aria-label="сохранить фильм"
-            onClick={handleSaveClick} /> : 
-          <button
+            onClick={handleChangeMovieStatus} />
+          : <button
             type="button"
             className="movie__delete-btn"
             aria-label="удалить фильм из сохраненных"
-            onClick={handleDeleteClick} />      
+            onClick={handleDelete}
+           />      
         } 
       </div>
     </li>

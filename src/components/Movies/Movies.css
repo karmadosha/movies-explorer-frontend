@@ -1,0 +1,10 @@
+.movies {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.movies__error {
+  text-align: center;
+  padding-top: 40px;
+}

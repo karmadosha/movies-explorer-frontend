@@ -3,7 +3,7 @@ import './Register.css';
 import WelcomeTop from "../WelcomeTop/Welcome";
 import Form from "../Form/Form";
 
-function Register() {
+function Register({ onRegister, isLoading }) {
   
   return(
     <main>
@@ -12,10 +12,12 @@ function Register() {
           <WelcomeTop />
           <Form 
             inputUserName={true}
-            submitBtn={'Зарегистрироваться'}
+            submitBtn={isLoading ? 'Регистрация...' : 'Зарегистрироваться'}
             question={'Уже зарегистрированы?'}
             link={'/signin'}
             linkText={'Войти'}
+            onSubmit={onRegister}
+            isLoading={isLoading}
           />
         </div>
       </section>

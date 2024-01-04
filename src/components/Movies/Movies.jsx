@@ -1,23 +1,132 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import './Movies.css';
 import SearchForm from "./SearchForm/SearchForm";
-import {movies} from "../../utils/constants";
 import MoviesCardList from "./MoviesCardList/MoviesCardList";
+import Header from "../Header/Header";
+import Footer from "../Footer/Footer";
 import Preloader from "./Preloader/Preloader";
+import { errorMessages } from "../../utils/constants";
+import { filterMovies, filterByDuration } from "../../utils/utils";
+import { getAllMovies } from "../../utils/MoviesApi";
 
-function Movies() {  
-  const [isLoading, setIsLoading] = React.useState(false);
-  return(
-    <main>      
-      <SearchForm />
-      {isLoading 
-        ? <Preloader /> 
-        : <MoviesCardList movies={movies} />
-      }      
-    </main>
+function Movies({ onLikeClick, onDeleteClick, likedMovies, isLoading, setIsLoading, handleErrorMessage }) {
+
+  const [isShort, setIsShort] = useState(false);  
+  const [filteredMovies, setFilteredMovies] = useState([]);
+  const [startingMovies, setStartingMovies] = useState([]);
+  const [allMovies, setAllMovies] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [error, setError] = useState(false); 
+
+  function handleMoviesFilter(movies, keyword, checkbox) {
+    const moviesList = filterMovies(movies, keyword, checkbox);   
+
+    if (moviesList.length < 1) {
+      setError(true);               
+    } else {
+      setError(false);      
+    }
     
-  )
+    setStartingMovies(moviesList);
+    setFilteredMovies(checkbox ? filterByDuration(moviesList) : moviesList);
+    localStorage.setItem('movies', JSON.stringify(moviesList));
+    localStorage.setItem('shortMoviesFiltered', JSON.stringify(filterByDuration(moviesList)));
+  };
 
+  function handleSearchSubmit(value) {
+    setSearchQuery(value);
+    localStorage.setItem('searchQuery', value);
+    localStorage.setItem('shortMovies', isShort);
+        
+    if (localStorage.getItem('allMovies')) {
+      const allMoviesList = JSON.parse(localStorage.getItem('allMovies'));
+      handleMoviesFilter(allMoviesList, value, isShort);
+    } else 
+      if (!allMovies.length) {
+        setIsLoading(true);
+        getAllMovies()
+          .then((res) => {
+            setAllMovies(res);
+            localStorage.setItem('allMovies', JSON.stringify(res));
+            handleMoviesFilter(res, value, isShort);
+          })
+          .catch((err) => {
+            console.log(err);
+            handleErrorMessage(errorMessages.searchError);
+          })
+          .finally(() => setIsLoading(false));
+      }
+  }
+
+  useEffect(() => {
+    if (localStorage.getItem('movies')) {
+      const movies = JSON.parse(localStorage.getItem('movies'));
+      setStartingMovies(movies);
+      if (localStorage.getItem('shortMovies') === true) {
+        setFilteredMovies(filterByDuration(movies));
+      } else {
+        setFilteredMovies(movies);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (filteredMovies.length === 0 && isShort) {
+      setError(true);      
+    } else {
+      setError(false);      
+    }  
+  }, [filteredMovies.length, isShort]);
+
+  useEffect(() => {
+    const checkbox = JSON.parse(localStorage.getItem('shortMovies'));
+    if (checkbox) {
+      setIsShort(true);
+      if (localStorage.getItem('shortMoviesFiltered')) {
+        const shortMovies = JSON.parse(localStorage.getItem('shortMoviesFiltered'));
+        setFilteredMovies(shortMovies);
+      }
+    } else {
+      setIsShort(false);
+    }
+  }, []);   
+
+  function handleShortMovies() {
+    setIsShort(!isShort);
+    if (!isShort) {
+      setFilteredMovies(filterByDuration(startingMovies));
+    } else {
+      setFilteredMovies(startingMovies);
+    }
+    localStorage.setItem('shortMovies', !isShort);
+  };
+
+  return (
+    <>
+      <Header isLoggedIn={true} /> 
+      <main className="movies">
+        <SearchForm        
+          onSearch={handleSearchSubmit}
+          onCheckBox={handleShortMovies}          
+          isShort={isShort}
+          searchQuery={searchQuery}       
+          isLoading={isLoading}
+        />  
+        {isLoading && !error && <Preloader />}
+        {error
+          ? <span className="movies__error">{errorMessages.notFound}</span> : " "}
+        {!error && <MoviesCardList 
+              movies={filteredMovies}
+              likedMovies={likedMovies}
+              onLikeClick={onLikeClick}
+              onDeleteClick={onDeleteClick}
+
+            />
+        }     
+      </main>
+      <Footer />
+    </>        
+  )
 };
 
 export default Movies;
